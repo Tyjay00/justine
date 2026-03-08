@@ -1,10 +1,73 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Clock, Heart, Feather, Sparkles, ArrowDown, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
-import image1 from './assets/Image1.jpg';
-import image2 from './assets/Image2.jpg';
-import image3 from './assets/Image3.jpg';
-import image4 from './assets/Image4.jpg';
-import image5 from './assets/Image5.jpg';
+import { Shield, Clock, Heart, Feather, Sparkles, ArrowDown, ChevronLeft, ChevronRight, BookOpen, Map, Users, Compass, Crown, Gem, Star } from 'lucide-react';
+
+import image10 from './assets/Image10.jpg';
+import image11 from './assets/Image11.jpg';
+import image12 from './assets/Image12.jpg';
+import image13 from './assets/Image13.jpg';
+import image14 from './assets/Image14.jpg';
+import image15 from './assets/Image15.jpg';
+
+// -- Interactive "Obstacles" Component --
+const CuteObstacles = () => {
+  const [bubbles, setBubbles] = useState([
+    { id: 1, x: 10, y: 20, emoji: '💖', message: "You're a Queen! 👑", popped: false },
+    { id: 2, x: 80, y: 40, emoji: '✨', message: "Slay! 💅", popped: false },
+    { id: 3, x: 20, y: 70, emoji: '🦋', message: "Independent! 💎", popped: false },
+    { id: 4, x: 75, y: 85, emoji: '🥂', message: "Boss Vibes! ✨", popped: false },
+  ]);
+
+  const popBubble = (id) => {
+    setBubbles(bubbles.map(b => b.id === id ? { ...b, popped: true } : b));
+  };
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-40">
+      {bubbles.map((bubble) => (
+        <div
+          key={bubble.id}
+          className={`absolute transition-all duration-500 ease-out ${bubble.popped ? 'scale-150 opacity-0' : 'animate-bounce-slow pointer-events-auto cursor-pointer hover:scale-110'}`}
+          style={{ left: `${bubble.x}%`, top: `${bubble.y}%` }}
+          onClick={() => popBubble(bubble.id)}
+        >
+          {bubble.popped ? (
+            <div className="text-pink-500 font-bold bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-xl border border-pink-200 text-sm whitespace-nowrap">
+              {bubble.message}
+            </div>
+          ) : (
+            <div className="w-14 h-14 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(236,72,153,0.3)] border border-pink-100 text-2xl animate-pulse">
+              {bubble.emoji}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// -- Background Emojis Animation --
+const FloatingEmojis = () => {
+  const emojis = ['💖', '✨', '💎', '🌸', '👑', '💅'];
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      {[...Array(15)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute animate-float-up opacity-0"
+          style={{
+            left: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 10}s`,
+            animationDuration: `${10 + Math.random() * 10}s`,
+            fontSize: `${1 + Math.random() * 1.5}rem`
+          }}
+        >
+          {emojis[Math.floor(Math.random() * emojis.length)]}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);
@@ -18,7 +81,7 @@ export default function App() {
     {
       chapter: "Chapters 40-55",
       title: "Trusting in God's Power",
-      text: "Known as the \"Book of Comfort,\" these chapters emphasize God’s sovereignty over creation and history, encouraging the exiled Israelites to trust in His promise of restoration."
+      text: "Known as the \"Book of Comfort,\" these chapters emphasize God’s sovereignty over creation and history, encouraging us to trust in His promise of restoration."
     },
     {
       chapter: "Chapter 7",
@@ -49,40 +112,22 @@ export default function App() {
       if (direction === 'next' && bookPage < bookPages.length - 1) setBookPage(p => p + 1);
       if (direction === 'prev' && bookPage > 0) setBookPage(p => p - 1);
       setIsFlipping(false);
-    }, 400); // halfway point for the animation
+    }, 400); 
   };
 
   const slides = [
-    { 
-      image: image1, 
-      text: '"The least of you will become a thousand,' 
-    },
-    { 
-      image: image2, 
-      text: 'the smallest a mighty nation.' 
-    },
-    { 
-      image: image3, 
-      text: 'I am the LORD;' 
-    },
-    { 
-      image: image4, 
-      text: 'in its time,' 
-    },
-    { 
-      image: image5, 
-      text: 'I will do this swiftly."' 
-    }
+    { image: image11, text: '"The least of you will become a thousand,' },
+    { image: image12, text: 'the smallest a mighty nation.' },
+    { image: image13, text: 'I am the LORD;' },
+    { image: image10, text: 'in its time,' },
+    { image: image15, text: 'I will do this swiftly."' }
   ];
 
   useEffect(() => {
     setLoaded(true);
-    
-    // Auto-advance the scriptures every 5 seconds
     const timer = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
-    
     return () => clearInterval(timer);
   }, [slides.length]);
 
@@ -97,48 +142,76 @@ export default function App() {
   const prevSlide = () => setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-stone-800 font-sans selection:bg-amber-100 selection:text-amber-900">
-      {/* Background ambient accents */}
-      <div className="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-amber-50 rounded-full blur-3xl opacity-60"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[30rem] h-[30rem] bg-stone-100 rounded-full blur-3xl opacity-60"></div>
+    <div className="min-h-screen bg-[#FFF0F5] text-rose-950 font-sans selection:bg-pink-300 selection:text-pink-900 overflow-x-hidden relative">
+      
+      {/* Custom Keyframe Styles */}
+      <style>{`
+        @keyframes float-up {
+          0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+          20% { opacity: 0.8; }
+          80% { opacity: 0.8; }
+          100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+        .animate-float-up { animation: float-up linear infinite; }
+        
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-15px); }
+        }
+        .animate-bounce-slow { animation: bounce-slow 4s ease-in-out infinite; }
+      `}</style>
+
+      {/* Background ambient accents - Bougee Gradients */}
+      <div className="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none bg-gradient-to-br from-pink-50 via-rose-50 to-purple-50">
+        <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-pink-300 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[30rem] h-[30rem] bg-fuchsia-300 rounded-full blur-3xl opacity-30"></div>
+        <div className="absolute top-[40%] left-[60%] w-[20rem] h-[20rem] bg-rose-400 rounded-full blur-3xl opacity-20"></div>
       </div>
 
+      <FloatingEmojis />
+      <CuteObstacles />
+
       {/* Hero Section */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-6 relative">
+      <section className="min-h-screen flex flex-col items-center justify-center px-6 relative z-10">
         <div className={`max-w-2xl mx-auto text-center transition-all duration-1000 transform ${loaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-          <div className="flex justify-center mb-6">
-            <Feather className="w-8 h-8 text-amber-700/60" strokeWidth={1.5} />
+          <div className="flex justify-center mb-6 space-x-3">
+            <Sparkles className="w-8 h-8 text-pink-500 animate-pulse" strokeWidth={1.5} />
+            <Crown className="w-8 h-8 text-yellow-500 animate-bounce-slow" strokeWidth={1.5} />
           </div>
-          <p className="text-sm tracking-[0.3em] uppercase text-stone-500 mb-4">From Tyrone To</p>
-          <h1 className="text-5xl md:text-6xl font-serif text-stone-800 mb-6 tracking-tight">
-            Donelle
+          <p className="text-sm tracking-[0.3em] uppercase text-pink-500 font-bold mb-4 bg-white/50 inline-block px-4 py-1 rounded-full border border-pink-200 shadow-sm backdrop-blur-sm">
+            Made Especially For
+          </p>
+          <h1 className="text-6xl md:text-8xl font-serif text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-rose-500 to-fuchsia-600 mb-6 tracking-tight drop-shadow-sm">
+            Michelle
           </h1>
-          <p className="text-lg md:text-xl text-stone-600 leading-relaxed max-w-lg mx-auto">
-            I see a truly remarkable girl who deserves to know she doesn't have to carry it all alone.
+          <p className="text-sm tracking-[0.3em] uppercase text-pink-500 font-bold mb-4 bg-white/50 inline-block px-4 py-1 rounded-full border border-pink-200 shadow-sm backdrop-blur-sm">
+            By Tyrone
+          </p>
+          <p className="text-lg md:text-2xl text-rose-800/80 leading-relaxed max-w-lg mx-auto font-medium">
+            I was thinking about our conversation, and I wanted to put together a few reminders to encourage you on your journey. <br/> <span className="text-pink-600 font-bold">Keep shining. ✨</span>
           </p>
         </div>
         
         <button 
           onClick={() => smoothScroll('the-promise')}
-          className="absolute bottom-12 animate-bounce p-3 rounded-full bg-white shadow-sm border border-stone-100 text-stone-400 hover:text-amber-700 hover:shadow-md transition-all"
+          className="absolute bottom-12 animate-bounce p-4 rounded-full bg-gradient-to-r from-pink-500 to-rose-400 shadow-[0_0_20px_rgba(236,72,153,0.4)] text-white hover:scale-110 transition-all focus:outline-none"
         >
-          <ArrowDown className="w-5 h-5" />
+          <ArrowDown className="w-6 h-6" />
         </button>
       </section>
 
       {/* The Anchor Verse - Flowing Images Section */}
-      <section id="the-promise" className="py-24 px-6 bg-stone-900">
+      <section id="the-promise" className="py-24 px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <Clock className="w-8 h-8 text-amber-500/80 mx-auto mb-6" strokeWidth={1.5} />
-            <p className="text-sm tracking-widest uppercase text-stone-400 font-semibold">
+            <Heart className="w-10 h-10 text-pink-500 fill-pink-500/20 mx-auto mb-6 animate-pulse" strokeWidth={1.5} />
+            <p className="text-sm tracking-widest uppercase text-pink-600 font-bold bg-white/60 inline-block px-6 py-2 rounded-full shadow-sm border border-pink-100">
               Isaiah 60:22
             </p>
           </div>
 
           {/* Image Slider */}
-          <div className="relative h-[60vh] md:h-[75vh] w-full rounded-3xl overflow-hidden shadow-2xl group">
+          <div className="relative h-[60vh] md:h-[75vh] w-full rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(236,72,153,0.3)] group border-4 border-white/50 backdrop-blur-sm">
             {slides.map((slide, index) => (
               <div 
                 key={index}
@@ -152,12 +225,12 @@ export default function App() {
                   style={{ backgroundImage: `url(${slide.image})` }}
                 ></div>
                 
-                {/* Dark Overlay for Text Readability */}
-                <div className="absolute inset-0 bg-black/50"></div>
+                {/* Bougee Overlay for Text Readability - Fuchsia tint */}
+                <div className="absolute inset-0 bg-gradient-to-t from-fuchsia-900/80 via-rose-900/40 to-transparent"></div>
 
                 {/* Scripture Text */}
                 <div className="absolute inset-0 flex items-center justify-center p-8 md:p-16 text-center">
-                  <h2 className={`text-4xl md:text-6xl lg:text-7xl font-serif text-white leading-tight transition-all duration-1000 delay-300 ${
+                  <h2 className={`text-4xl md:text-6xl lg:text-7xl font-serif text-white leading-tight transition-all duration-1000 delay-300 drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)] ${
                     activeSlide === index ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
                   }`}>
                     {slide.text}
@@ -169,15 +242,15 @@ export default function App() {
             {/* Controls */}
             <button 
               onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute left-6 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all focus:outline-none shadow-lg border border-white/30"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-8 h-8" />
             </button>
             <button 
               onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute right-6 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all focus:outline-none shadow-lg border border-white/30"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-8 h-8" />
             </button>
 
             {/* Indicators */}
@@ -186,8 +259,8 @@ export default function App() {
                 <button
                   key={index}
                   onClick={() => setActiveSlide(index)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-500 ${
-                    activeSlide === index ? 'bg-amber-500 w-8' : 'bg-white/50 hover:bg-white/80'
+                  className={`h-3 rounded-full transition-all duration-500 focus:outline-none shadow-sm ${
+                    activeSlide === index ? 'bg-gradient-to-r from-pink-400 to-rose-400 w-10' : 'bg-white/50 hover:bg-white w-3'
                   }`}
                 />
               ))}
@@ -197,119 +270,105 @@ export default function App() {
       </section>
 
       {/* The Book of Comfort - Interactive Bible Section */}
-      <section className="py-24 px-6 bg-stone-100 overflow-hidden relative border-y border-stone-200">
-        {/* Subtle background texture/pattern */}
-        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] pointer-events-none"></div>
+      <section className="py-24 px-6 relative z-10 border-y border-pink-100/50 bg-white/30 backdrop-blur-sm">
         
         <div className="max-w-4xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <BookOpen className="w-8 h-8 text-amber-700/60 mx-auto mb-6" strokeWidth={1.5} />
-            <h2 className="text-3xl md:text-4xl font-serif text-stone-800 mb-4">The Book of Comfort</h2>
-            <p className="text-stone-500 max-w-lg mx-auto">
-              Messages from Isaiah to remind you that even in exhaustion, there is a promise of renewal, strength, and unwavering faithfulness.
+            <BookOpen className="w-10 h-10 text-rose-500 mx-auto mb-6 drop-shadow-sm" strokeWidth={1.5} />
+            <h2 className="text-4xl md:text-5xl font-serif text-transparent bg-clip-text bg-gradient-to-r from-rose-700 to-pink-600 mb-4">The Book of Comfort</h2>
+            <p className="text-rose-800/70 max-w-lg mx-auto font-medium text-lg">
+              A reminder that in seasons of planning and decision-making, there is a promise of guidance, strength, and unwavering faithfulness.
             </p>
           </div>
 
-          {/* Physical Book Container */}
-          <div className="relative w-full max-w-4xl mx-auto min-h-[400px] bg-[#FDFBF7] shadow-2xl rounded-sm border border-stone-200 flex flex-col md:flex-row">
+          <div className="relative w-full max-w-4xl mx-auto min-h-[400px] bg-white/80 backdrop-blur-xl shadow-[0_10px_40px_rgba(236,72,153,0.15)] rounded-3xl border border-pink-100 flex flex-col md:flex-row overflow-hidden">
+            <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-16 -ml-8 bg-gradient-to-r from-transparent via-pink-100/50 to-transparent z-10 pointer-events-none"></div>
             
-            {/* Center Book Spine */}
-            <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-16 -ml-8 bg-gradient-to-r from-transparent via-stone-300/40 to-transparent z-10 pointer-events-none"></div>
-            
-            {/* Left Page (Fixed Title/Chapter) */}
-            <div className="flex-1 p-8 md:p-16 flex flex-col justify-center border-b md:border-b-0 md:border-r border-stone-200 relative">
-              <div className="absolute top-6 left-6 text-stone-300">
-                <Feather size={20} strokeWidth={1.5} />
+            <div className="flex-1 p-8 md:p-16 flex flex-col justify-center border-b md:border-b-0 md:border-r border-pink-100 relative bg-gradient-to-br from-white to-pink-50/50">
+              <div className="absolute top-6 left-6 text-pink-300">
+                <Feather size={24} strokeWidth={1.5} />
               </div>
               
               <div className={`transition-all duration-400 ${isFlipping ? 'opacity-0 -translate-x-4' : 'opacity-100 translate-x-0'}`}>
-                <p className="text-amber-700 font-medium tracking-widest text-sm uppercase mb-4">
-                  {bookPages[bookPage].chapter}
+                <p className="text-pink-500 font-bold tracking-widest text-sm uppercase mb-4 flex items-center gap-2">
+                  <Star className="w-4 h-4 text-yellow-400" /> {bookPages[bookPage].chapter}
                 </p>
-                <h3 className="text-3xl md:text-4xl font-serif text-stone-800 leading-tight">
+                <h3 className="text-3xl md:text-5xl font-serif text-rose-900 leading-tight">
                   {bookPages[bookPage].title}
                 </h3>
               </div>
             </div>
 
-            {/* Right Page (Text Content) */}
-            <div className="flex-1 p-8 md:p-16 flex flex-col justify-center relative">
+            <div className="flex-1 p-8 md:p-16 flex flex-col justify-center relative bg-white">
               <div className={`transition-all duration-400 ${isFlipping ? 'opacity-0 translate-x-4' : 'opacity-100 translate-x-0'}`}>
-                <p className="text-stone-600 leading-relaxed text-lg md:text-xl font-serif italic text-justify">
+                <p className="text-rose-800/80 leading-relaxed text-lg md:text-xl font-serif text-justify">
                   "{bookPages[bookPage].text}"
                 </p>
               </div>
 
-               {/* Page Number */}
-               <div className="absolute bottom-6 right-8 text-stone-400 text-sm font-serif italic">
+               <div className="absolute bottom-6 right-8 text-pink-400 text-sm font-serif font-bold bg-pink-50 px-4 py-1 rounded-full">
                  Page {bookPage + 1} of {bookPages.length}
                </div>
             </div>
 
           </div>
 
-          {/* Book Controls */}
-          <div className="mt-12 flex justify-center items-center space-x-8">
+          <div className="mt-12 flex justify-center items-center space-x-4 md:space-x-8">
             <button 
               onClick={() => turnPage('prev')} 
               disabled={bookPage === 0} 
-              className="flex items-center space-x-2 px-6 py-3 rounded-full bg-white shadow-sm border border-stone-200 text-stone-600 hover:text-amber-700 hover:shadow-md disabled:opacity-40 disabled:hover:shadow-sm disabled:hover:text-stone-600 transition-all"
+              className="flex items-center space-x-2 px-8 py-4 rounded-full bg-white shadow-lg border border-pink-100 text-pink-600 hover:bg-pink-50 hover:scale-105 disabled:opacity-40 disabled:hover:scale-100 disabled:hover:bg-white transition-all focus:outline-none font-bold"
             >
-              <ChevronLeft className="w-4 h-4" />
-              <span className="text-sm font-medium tracking-wider uppercase">Turn Back</span>
+              <ChevronLeft className="w-5 h-5" />
+              <span className="text-sm tracking-wider uppercase">Turn Back</span>
             </button>
             <button 
               onClick={() => turnPage('next')} 
               disabled={bookPage === bookPages.length - 1} 
-              className="flex items-center space-x-2 px-6 py-3 rounded-full bg-white shadow-sm border border-stone-200 text-stone-600 hover:text-amber-700 hover:shadow-md disabled:opacity-40 disabled:hover:shadow-sm disabled:hover:text-stone-600 transition-all"
+              className="flex items-center space-x-2 px-8 py-4 rounded-full bg-gradient-to-r from-pink-500 to-rose-400 shadow-[0_0_15px_rgba(236,72,153,0.3)] text-white hover:scale-105 disabled:opacity-40 disabled:hover:scale-100 transition-all focus:outline-none font-bold"
             >
-              <span className="text-sm font-medium tracking-wider uppercase">Turn Page</span>
-              <ChevronRight className="w-4 h-4" />
+              <span className="text-sm tracking-wider uppercase">Turn Page</span>
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         </div>
       </section>
 
       {/* The Conversation - Breaking it down */}
-      <section className="py-24 px-6 bg-[#FAFAFA]">
-        <div className="max-w-2xl mx-auto space-y-24">
+      <section className="py-24 px-6 relative z-10">
+        <div className="max-w-2xl mx-auto space-y-12 md:space-y-16">
           
-          {/* On Being Tired */}
-          <div className="space-y-6">
-            <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center mb-6 border border-amber-100 shadow-sm">
-              <Sparkles className="w-6 h-6 text-amber-600" strokeWidth={1.5} />
+          {/* On Planning and Moving */}
+          <div className="bg-white/60 backdrop-blur-md p-8 md:p-10 rounded-[2rem] shadow-xl border border-pink-100 hover:-translate-y-2 transition-transform duration-300">
+            <div className="w-16 h-16 bg-gradient-to-br from-pink-100 to-rose-100 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-pink-200">
+              <Map className="w-8 h-8 text-pink-600" strokeWidth={1.5} />
             </div>
-            <h3 className="text-2xl font-serif text-stone-800">Declaring the circle over.</h3>
-            <p className="text-stone-600 leading-relaxed text-lg">
-              You mentioned that you've been going through a difficult period for years, that you needed help, and that you simply got tired. 
-              <br/><br/>
-              It takes a profound amount of strength to say, <em>"I'm declaring this circle over."</em> Going ghost wasn't a cliché; it was a necessary retreat. God honors our rest. When we are too tired to build, He asks us to just sit still while He works on our behalf.
+            <h3 className="text-3xl font-serif text-rose-900 mb-4">On planning your next move. 🗺️</h3>
+            <p className="text-rose-800/80 leading-relaxed text-lg">
+              <strong className="text-pink-600">Proverbs 16:9</strong> says, <em>"In their hearts humans plan their course, but the Lord establishes their steps."</em> Keep making your plans, but take comfort in knowing you don't have to have it all perfectly figured out. God is guiding your steps.
             </p>
           </div>
 
-          {/* On Walls */}
-          <div className="space-y-6">
-            <div className="w-12 h-12 bg-stone-100 rounded-2xl flex items-center justify-center mb-6 border border-stone-200 shadow-sm">
-              <Shield className="w-6 h-6 text-stone-600" strokeWidth={1.5} />
+          {/* On Family and Teamwork */}
+          <div className="bg-white/60 backdrop-blur-md p-8 md:p-10 rounded-[2rem] shadow-xl border border-pink-100 hover:-translate-y-2 transition-transform duration-300">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-fuchsia-100 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-purple-200">
+              <Users className="w-8 h-8 text-fuchsia-600" strokeWidth={1.5} />
             </div>
-            <h3 className="text-2xl font-serif text-stone-800">The walls you've built.</h3>
-            <p className="text-stone-600 leading-relaxed text-lg">
-              "I have walls up for a variety of reasons. I'm not an easy person to read."
-              <br/><br/>
-              Walls aren't always a bad thing. They are placed there to protect a heart that is valuable, a spirit that has been through a lot. I don't expect you to tear them down overnight, and I don't expect you to be easy to read. You are allowed to take your time. 
+            <h3 className="text-3xl font-serif text-rose-900 mb-4">You and I could make a great team. 👯‍♀️</h3>
+            <p className="text-rose-800/80 leading-relaxed text-lg">
+              <strong className="text-fuchsia-600">Ecclesiastes 4:9</strong> reminds us, <em>"Two are better than one, because they have a good return for their labor."</em> It's awesome that you guys have each other's backs through the ups and downs.
             </p>
           </div>
 
-          {/* On "Why Me?" */}
-          <div className="space-y-6 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-stone-100">
-            <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 border border-rose-100 shadow-sm">
-              <Heart className="w-6 h-6 text-rose-500" strokeWidth={1.5} />
+          {/* On Making Decisions */}
+          <div className="bg-gradient-to-br from-white to-pink-50 p-8 md:p-12 rounded-[2rem] shadow-2xl border border-pink-200 hover:-translate-y-2 transition-transform duration-300 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-pink-200 rounded-full blur-3xl opacity-50"></div>
+            <div className="w-16 h-16 bg-gradient-to-br from-rose-100 to-pink-200 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-rose-200 relative z-10">
+              <Compass className="w-8 h-8 text-rose-600" strokeWidth={1.5} />
             </div>
-            <h3 className="text-2xl font-serif text-stone-800">"But what makes you so sure it's me?"</h3>
-            <p className="text-stone-600 leading-relaxed text-lg">
-              Because beneath the tiredness, the walls, and the ghosting, I see someone deeply anchored in her faith. I see a woman who is self-aware enough to break toxic cycles, and honest enough to say she's exhausted. 
-              <br/><br/>
-              I'm sure, because I'm not looking for an "easy" read. I'm looking at someone who trusts that in Isaiah 60:22, the Lord will hasten things in His time. And I am perfectly willing to wait on that time with you.
+            <h3 className="text-3xl font-serif text-rose-900 mb-4 relative z-10">Figuring things out as time goes on. 💎</h3>
+            <p className="text-rose-800/80 leading-relaxed text-lg relative z-10">
+              <strong className="text-rose-600">Proverbs 3:5-6</strong> says, <em>"Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight."</em> Whenever you feel stuck on a choice, we can always pause and seek wisdom together. I'm here to help, step by step.
             </p>
           </div>
 
@@ -317,15 +376,16 @@ export default function App() {
       </section>
 
       {/* Footer / Outro */}
-      <footer className="py-24 px-6 text-center border-t border-stone-100 bg-white">
-        <div className="max-w-xl mx-auto">
-          <h4 className="font-serif text-xl text-stone-800 mb-4">You Special and Deserve the Best.</h4>
-          <p className="text-stone-500 mb-8">
-            No pressure. No rushing.. 
+      <footer className="py-24 px-6 text-center border-t border-pink-200/50 bg-white/40 backdrop-blur-md relative z-10">
+        <div className="max-w-xl mx-auto flex flex-col items-center">
+          <Gem className="w-10 h-10 text-pink-400 mb-6 animate-bounce-slow" strokeWidth={1.5}/>
+          <h4 className="font-serif text-3xl text-rose-900 mb-4 drop-shadow-sm">You're special and deserve the best. 💖</h4>
+          <p className="text-rose-800/60 mb-8 font-medium text-lg">
+            No pressure. Just taking it one step at a time.
           </p>
-          <div className="w-16 h-px bg-stone-200 mx-auto"></div>
-          <p className="mt-8 text-sm text-stone-400">
-            Made with patience and prayer, for Donelle.
+          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-pink-300 to-transparent mx-auto rounded-full"></div>
+          <p className="mt-8 text-sm text-pink-500 font-bold tracking-widest uppercase bg-white/50 px-6 py-2 rounded-full inline-block border border-pink-100 shadow-sm">
+            Made with patience and care, for Michelle. 💅
           </p>
         </div>
       </footer>
