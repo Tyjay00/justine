@@ -6,7 +6,6 @@ import image17 from './assets/Image17.jpg';
 import image18 from './assets/Image18.jpg';
 import image19 from './assets/Image19.jpg';
 import image20 from './assets/Image20.jpg';
-import image15 from './assets/Image15.jpg';
 
 // -- Interactive "Obstacles" Component --
 const CuteObstacles = () => {
