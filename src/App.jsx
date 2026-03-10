@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Clock, Heart, Feather, Sparkles, ArrowDown, ChevronLeft, ChevronRight, BookOpen, Map, Users, Compass, Crown, Gem, Star } from 'lucide-react';
 
-import image10 from './assets/Image10.jpg';
-import image11 from './assets/Image11.jpg';
-import image12 from './assets/Image12.jpg';
-import image13 from './assets/Image13.jpg';
-import image14 from './assets/Image14.jpg';
+import image16 from './assets/Image16.jpeg';
+import image17 from './assets/Image17.jpg';
+import image18 from './assets/Image18.jpg';
+import image19 from './assets/Image19.jpg';
+import image20 from './assets/Image20.jpg';
 import image15 from './assets/Image15.jpg';
 
 // -- Interactive "Obstacles" Component --
@@ -116,11 +116,11 @@ export default function App() {
   };
 
   const slides = [
-    { image: image11, text: '"The least of you will become a thousand,' },
-    { image: image12, text: 'the smallest a mighty nation.' },
-    { image: image13, text: 'I am the LORD;' },
-    { image: image10, text: 'in its time,' },
-    { image: image15, text: 'I will do this swiftly."' }
+    { image: image16, text: '"The least of you will become a thousand,' },
+    { image: image17, text: 'the smallest a mighty nation.' },
+    { image: image18, text: 'I am the LORD;' },
+    { image: image19, text: 'in its time,' },
+    { image: image20, text: 'I will do this swiftly."' }
   ];
 
   useEffect(() => {
@@ -182,7 +182,7 @@ export default function App() {
             Made Especially For
           </p>
           <h1 className="text-6xl md:text-8xl font-serif text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-rose-500 to-fuchsia-600 mb-6 tracking-tight drop-shadow-sm">
-            Michelle
+            Justine
           </h1>
           <p className="text-sm tracking-[0.3em] uppercase text-pink-500 font-bold mb-4 bg-white/50 inline-block px-4 py-1 rounded-full border border-pink-200 shadow-sm backdrop-blur-sm">
             By Tyrone
@@ -385,7 +385,7 @@ export default function App() {
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-transparent via-pink-300 to-transparent mx-auto rounded-full"></div>
           <p className="mt-8 text-sm text-pink-500 font-bold tracking-widest uppercase bg-white/50 px-6 py-2 rounded-full inline-block border border-pink-100 shadow-sm">
-            Made with patience and care, for Michelle. 💅
+            Made with patience and care, for Justine. 💅
           </p>
         </div>
       </footer>
